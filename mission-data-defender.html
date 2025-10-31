@@ -353,7 +353,7 @@ function checkAnswer(i){
   } else {
     rogue.style.animation='attack 0.6s';
     feedback.className="wrong";
-    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explain;
+    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explaination;
   }
   updateProgress();
   setTimeout(()=>{captain.style.animation=''; rogue.style.animation='';},700);
