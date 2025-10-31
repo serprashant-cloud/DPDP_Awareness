@@ -194,6 +194,7 @@
 <body>
   <div id="game-container">
     <div id="intro">
+  <<div id="intro">
   <div id="captain"></div>
   <h1>Welcome Defender Cadet!</h1>
   <div id="speech">
@@ -313,10 +314,10 @@ nextBtn.onclick=nextQuestion;
 function startGame(){
   const input = document.getElementById("userNameInput");
   userName = input.value.trim();
-  
-  if(!userName){
+
+  if(!userName){ // prevent starting game without name
     alert("Please enter your name to start!");
-    return; // do not start game
+    return; // stops execution
   }
 
   intro.classList.add('hidden');
