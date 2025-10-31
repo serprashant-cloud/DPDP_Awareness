@@ -32,7 +32,7 @@
   #battlefield { position:relative;width:100%;height:160px;margin-top:20px; }
   .character { position:absolute; bottom:0; transition:transform .8s ease; }
   #captain { left:5%; width:clamp(70px,20vw,130px); height:clamp(70px,20vw,130px); background:radial-gradient(circle at 30% 30%, #00eaff,#004d80); border-radius:50%; box-shadow:0 0 20px #00eaff, inset 0 0 10px #00eaff; }
-  #captain::after { content:"🛡️"; font-size:clamp(2rem,6vw,3rem); position:absolute; top:25%; left:0; right:0; text-align:center; }
+  #captain::after { content:""; font-size:clamp(2rem,6vw,3rem); position:absolute; top:25%; left:0; right:0; text-align:center; }
   #rogue { right:5%; width:clamp(70px,20vw,130px); height:clamp(70px,20vw,130px); background:radial-gradient(circle at 30% 30%, #ff3333,#660000); border-radius:50%; box-shadow:0 0 20px #ff3333, inset 0 0 10px #ff3333; }
   #rogue::after { content:"💀"; font-size:clamp(2rem,6vw,3rem); position:absolute; top:25%; left:0; right:0; text-align:center; }
   #progressBar { width:100%; height:18px; background:rgba(255,255,255,0.2); border-radius:10px; margin-top:10px; overflow:hidden; }
@@ -56,7 +56,7 @@
   <div id="game-container">
     <div id="intro">
       <div class="title-container">
-        <span class="shield-icon">🛡️</span>
+        <span class="shield-icon"></span>
         <h1>Welcome Defender Cadet!</h1>
       </div>
 
