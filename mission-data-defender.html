@@ -310,10 +310,10 @@ nextBtn.onclick=nextQuestion;
 
 function startGame(){
   // Ask for user name
-  userName = prompt("Enter your name, Defender Cadet:", "Cadet");
+  userName = prompt("Enter your name, Defender Cadet:", "");
   
   // If user clicks Cancel or leaves blank, use default
-  if(!userName || userName.trim() === "") userName = "Cadet";
+  if(!userName || userName.trim() === "") userName = "";
 
   intro.classList.add('hidden');
   final.classList.add('hidden');
