@@ -309,22 +309,19 @@ restartBtn.onclick=startGame;
 nextBtn.onclick=nextQuestion;
 
 function startGame(){
-userName = prompt("Enter your name, Defender Cadet:","");
-  if(!userName) userName = "";
+  // Ask for user name
+  userName = prompt("Enter your name, Defender Cadet:", "Cadet");
+  
+  // If user clicks Cancel or leaves blank, use default
+  if(!userName || userName.trim() === "") userName = "Cadet";
 
   intro.classList.add('hidden');
   final.classList.add('hidden');
   game.classList.remove('hidden');
+
   selectedQuestions = shuffle(allQuestions).slice(0,10);
-  current = 0; score = 0;
-  updateProgress();
-  resetPositions();
-  loadQuestion();
-  intro.classList.add('hidden');
-  final.classList.add('hidden');
-  game.classList.remove('hidden');
-  selectedQuestions=shuffle(questions).slice(0,10);
-  current=0;score=0;
+  current = 0; 
+  score = 0;
   updateProgress();
   resetPositions();
   loadQuestion();
