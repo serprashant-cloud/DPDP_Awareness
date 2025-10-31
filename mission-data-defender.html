@@ -219,14 +219,14 @@
       <button id="nextBtn" class="hidden">Next ➡️</button>
     </div>
 
-    <div id="final" class="hidden">
-      <div id="captain"></div>
-      <h2>Mission Debrief</h2>
-      <div id="badge"></div>
-      <h3 id="scoreText"></h3>
-      <p id="finalMessage"></p>
-      <button id="restartBtn">Play Again 🔁</button>
-    </div>
+    <div id="final" class="hidden" style="text-align:center;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:15px; margin-top:20px;">
+    <div id="badge" style="font-size:50px;"></div>
+    <h2 id="scoreText" style="margin:0;"></h2>
+    <div id="finalMessage" style="font-size:18px; color:#fff; max-width:80%;"></div>
+    <button onclick="restartGame()" style="margin-top:20px;">Play Again</button>
+  </div>
+</div>
   </div>
 
 <script>
