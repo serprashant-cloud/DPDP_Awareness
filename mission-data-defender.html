@@ -309,11 +309,24 @@ restartBtn.onclick=startGame;
 nextBtn.onclick=nextQuestion;
 
 function startGame(){
-  // Ask for user name
-  userName = prompt("Enter your name, Defender Cadet:", "");
-  
-  // If user clicks Cancel or leaves blank, use default
-  if(!userName || userName.trim() === "") userName = "";
+  // Keep prompting until user enters something or presses Cancel
+  while(true){
+    userName = prompt("Enter your name, Defender Cadet:", "");
+
+    // If Cancel is pressed, use default name
+    if(userName === null){
+      userName = "";
+      break;
+    }
+
+    // If user enters non-empty name, accept it
+    if(userName.trim() !== ""){
+      break;
+    }
+
+    // Otherwise, prompt again
+    alert("Please enter your name to continue!");
+  }
 
   intro.classList.add('hidden');
   final.classList.add('hidden');
