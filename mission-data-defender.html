@@ -349,11 +349,11 @@ function checkAnswer(i){
     score++;
     captain.style.animation='defend 0.6s';
     feedback.className="correct";
-    feedback.innerHTML="✅ Excellent! "+q.explaination;
+    feedback.innerHTML="✅ Excellent! "+q.explanation;
   } else {
     rogue.style.animation='attack 0.6s';
     feedback.className="wrong";
-    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explaination;
+    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explanation;
   }
   updateProgress();
   setTimeout(()=>{captain.style.animation=''; rogue.style.animation='';},700);
