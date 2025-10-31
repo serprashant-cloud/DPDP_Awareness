@@ -194,15 +194,17 @@
 <body>
   <div id="game-container">
     <div id="intro">
-      <div id="captain"></div>
-      <h1>Welcome Defender Cadet!</h1>
-      <div id="speech">
-        I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
-        Rogue Byte is advancing to breach our defences!<br>
-        Answer DPDP Act questions correctly to push him back!
-      </div>
-      <button id="startBtn">Begin Mission 🚀</button>
-    </div>
+  <div id="captain"></div>
+  <h1>Welcome Defender Cadet!</h1>
+  <div id="speech">
+    I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
+    Rogue Byte is advancing to breach our defenses!<br>
+    Enter your name to start your mission.
+  </div>
+  <input type="text" id="userNameInput" placeholder="Enter your name" style="padding:10px; border-radius:8px; border:none; width:60%; max-width:200px; margin-top:15px;">
+  <br>
+  <button id="startBtn">Begin Mission 🚀</button>
+</div>
 
     <div id="game" class="hidden">
       <div id="progressBar"><div id="progressFill"></div></div>
@@ -309,23 +311,12 @@ restartBtn.onclick=startGame;
 nextBtn.onclick=nextQuestion;
 
 function startGame(){
-  // Keep prompting until user enters something or presses Cancel
-  while(true){
-    userName = prompt("Enter your name, Defender Cadet:", "");
-
-    // If Cancel is pressed, use default name
-    if(userName === null){
-      userName = "";
-      break;
-    }
-
-    // If user enters non-empty name, accept it
-    if(userName.trim() !== ""){
-      break;
-    }
-
-    // Otherwise, prompt again
-    alert("Please enter your name to continue!");
+  const input = document.getElementById("userNameInput");
+  userName = input.value.trim();
+  
+  if(!userName){
+    alert("Please enter your name to start!");
+    return; // do not start game
   }
 
   intro.classList.add('hidden');
