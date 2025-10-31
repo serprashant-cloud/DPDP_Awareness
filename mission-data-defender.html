@@ -246,7 +246,7 @@ function handleAnswer(choice){
     cap.style.animation='defend 0.6s';
     setTimeout(()=>cap.style.animation='',650);
   }else{
-    fortressHealth = Math.max(0, fortressHealth-20);
+    fortressHealth = Math.max(0, fortressHealth-10);
     feedback.className='wrong';
     const correctText = q.options[q.answer] || '---';
     feedback.innerHTML = `<strong>❌ Wrong.</strong> Correct: <strong>${correctText}</strong><br>${q.explanation || ''}`;
