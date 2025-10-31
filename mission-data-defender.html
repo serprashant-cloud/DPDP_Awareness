@@ -227,6 +227,7 @@
   </div>
 
 <script>
+let userName = "";
 const allQuestions = [
   {question:"What does DPDP stand for?", options:["Digital Personal Data Protection","Data Privacy and Defense Policy","Digital Protection and Data Privacy","Data Policy for Digital Platforms"], answer:0, explanation:"DPDP stands for Digital Personal Data Protection Act, 2023."},
   {question:"Who is a Data Fiduciary under DPDP Act?", options:["Person who collects and decides purpose of processing personal data","Person whose data is collected","Regulator appointed by the government","IT vendor managing systems"], answer:0, explanation:"A Data Fiduciary determines the purpose and means of processing personal data."},
@@ -308,6 +309,17 @@ restartBtn.onclick=startGame;
 nextBtn.onclick=nextQuestion;
 
 function startGame(){
+userName = prompt("Enter your name, Defender Cadet:","");
+  if(!userName) userName = "";
+
+  intro.classList.add('hidden');
+  final.classList.add('hidden');
+  game.classList.remove('hidden');
+  selectedQuestions = shuffle(allQuestions).slice(0,10);
+  current = 0; score = 0;
+  updateProgress();
+  resetPositions();
+  loadQuestion();
   intro.classList.add('hidden');
   final.classList.add('hidden');
   game.classList.remove('hidden');
@@ -341,7 +353,7 @@ function checkAnswer(i){
   } else {
     rogue.style.animation='attack 0.6s';
     feedback.className="wrong";
-    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explaination;
+    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explain;
   }
   updateProgress();
   setTimeout(()=>{captain.style.animation=''; rogue.style.animation='';},700);
@@ -366,15 +378,19 @@ function updateProgress(){
 function endGame(){
   game.classList.add('hidden');
   final.classList.remove('hidden');
-  let percent=Math.round((score/selectedQuestions.length)*100);
-  scoreText.textContent="You answered "+score+" of "+selectedQuestions.length+" correctly ("+percent+"%).";
-  let msg,b;
-  if(percent>=90){b="🥇";msg="Gold Shield — Supreme Defender of Data!";}
-  else if(percent>=70){b="🥈";msg="Silver Shield — Strong Guardian of Privacy!";}
-  else if(percent>=50){b="🥉";msg="Bronze Shield — Privacy Apprentice!";}
-  else {b="⚙️";msg="Rookie Badge — Train harder with Captain Cypher!";}
-  badge.textContent=b;finalMessage.textContent=msg;
+  let percent = Math.round((score / selectedQuestions.length) * 100);
+  scoreText.textContent = userName + ", you answered " + score + " of " + selectedQuestions.length + " correctly (" + percent + "%).";
+
+  let msg, b;
+  if(percent >= 90){ b = "🥇"; msg = "Gold Shield — Supreme Defender of Data!"; }
+  else if(percent >= 70){ b = "🥈"; msg = "Silver Shield — Strong Guardian of Privacy!"; }
+  else if(percent >= 50){ b = "🥉"; msg = "Bronze Shield — Privacy Apprentice!"; }
+  else { b = "⚙️"; msg = "Rookie Badge — Train harder with Captain Cypher!"; }
+
+  badge.textContent = b + " " + userName; // include name with badge
+  finalMessage.textContent = msg;
 }
+
 function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
 function resetPositions(){
   captain.style.transform='translateX(0)';
