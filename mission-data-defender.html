@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defend the Data Fortress - DPDP Awareness Game</title>
+<style>
+  @keyframes bgShift {
+    0% { background: linear-gradient(135deg,#002b80,#0099cc); }
+    50% { background: linear-gradient(135deg,#004466,#00ccff); }
+    100% { background: linear-gradient(135deg,#002b80,#0099cc); }
+  }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    animation: bgShift 10s infinite alternate;
+    background-size: 400% 400%;
+    overflow-x: hidden;
+  }
+
+  #game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  h1, h2 {
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+    font-size: clamp(1.3rem, 4vw, 2rem);
+  }
+
+  .hidden { display: none; }
+
+  /* Captain Cypher and Rogue Byte */
+  #battlefield {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    margin-top: 20px;
+  }
+  .character {
+    position: absolute;
+    bottom: 0;
+    transition: transform 0.8s ease;
+  }
+  #captain {
+    left: 5%;
+    width: clamp(70px, 20vw, 130px);
+    height: clamp(70px, 20vw, 130px);
+    background: radial-gradient(circle at 30% 30%, #00eaff, #004d80);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #00eaff, inset 0 0 10px #00eaff;
+  }
+  #captain::after {
+    content: "🛡️";
+    font-size: clamp(2rem, 6vw, 3rem);
+    position: absolute; top: 25%; left: 0; right: 0; text-align: center;
+  }
+
+  #rogue {
+    right: 5%;
+    width: clamp(70px, 20vw, 130px);
+    height: clamp(70px, 20vw, 130px);
+    background: radial-gradient(circle at 30% 30%, #ff3333, #660000);
+    border-radius: 50%;
+    box-shadow: 0 0 20px #ff3333, inset 0 0 10px #ff3333;
+  }
+  #rogue::after {
+    content: "💀";
+    font-size: clamp(2rem, 6vw, 3rem);
+    position: absolute; top: 25%; left: 0; right: 0; text-align: center;
+  }
+
+  /* Fortress Health / Progress bar */
+  #progressBar {
+    width: 100%;
+    height: 18px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  #progressFill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #00ff99, #00ccff);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+  }
+
+  #speech {
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 15px;
+    margin: 10px auto;
+    max-width: 90%;
+    font-style: italic;
+    line-height: 1.4;
+    font-size: clamp(0.9rem, 3vw, 1rem);
+  }
+
+  button {
+    background: #00eaff;
+    color: #002b40;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: clamp(1rem, 4vw, 1.1rem);
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 0 15px #00ffff;
+    transition: all 0.3s;
+  }
+  button:hover, button:active {
+    transform: scale(1.05);
+    background: #66ffff;
+  }
+
+  .question {
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 20px;
+    transition: all 0.4s ease;
+    animation: fadeIn 0.6s;
+    font-size: clamp(1rem, 4vw, 1.1rem);
+  }
+
+  .option {
+    display: block;
+    background: rgba(255,255,255,0.2);
+    margin: 10px auto;
+    padding: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 95%;
+    transition: all 0.3s;
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+  }
+  .option:hover, .option:active {
+    background: rgba(0,255,255,0.5);
+    transform: scale(1.02);
+  }
+
+  #feedback {
+    margin-top: 20px;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    min-height: 50px;
+    padding: 0 10px;
+  }
+
+  .correct { color: #00ff99; animation: pulse 0.8s ease; }
+  .wrong { color: #ff6666; animation: pulse 0.8s ease; }
+
+  @keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  #final {
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 30px;
+    box-shadow: 0 0 25px rgba(0,255,255,0.3);
+  }
+
+  #badge {
+    font-size: clamp(3rem, 10vw, 5rem);
+    margin-top: 10px;
+  }
+
+  @keyframes defend {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(20px); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes attack {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(-20px); }
+    100% { transform: translateX(0); }
+  }
+
+  @media (max-width: 480px) {
+    .option { width: 100%; }
+    #speech { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div id="game-container">
+    <div id="intro">
+      <div id="captain"></div>
+      <h1>Welcome Defender Cadet!</h1>
+      <div id="speech">
+        I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
+        Rogue Byte is advancing to breach our defences!<br>
+        Answer DPDP Act questions correctly to push him back!
+      </div>
+      <button id="startBtn">Begin Mission 🚀</button>
+    </div>
+
+    <div id="game" class="hidden">
+      <div id="progressBar"><div id="progressFill"></div></div>
+      <div id="battlefield">
+        <div id="captain" class="character"></div>
+        <div id="rogue" class="character"></div>
+      </div>
+      <h2 id="questionText"></h2>
+      <div id="options"></div>
+      <div id="feedback"></div>
+      <button id="nextBtn" class="hidden">Next ➡️</button>
+    </div>
+
+    <div id="final" class="hidden">
+      <div id="captain"></div>
+      <h2>Mission Debrief</h2>
+      <div id="badge"></div>
+      <h3 id="scoreText"></h3>
+      <p id="finalMessage"></p>
+      <button id="restartBtn">Play Again 🔁</button>
+    </div>
+  </div>
+
+<script>
+const questions=[
+  {q:"What does the DPDP Act 2023 primarily regulate?",options:["Cybercrimes","Data storage","Personal data processing","Electronic transactions"],answer:2,explain:"It governs processing of personal data ensuring privacy rights."},
+  {q:"Who is considered the Data Principal?",options:["The Government","The individual whose data is processed","The Data Fiduciary","The Processor"],answer:1,explain:"Data Principal is the person to whom the personal data relates."},
+  {q:"Maximum penalty for non-compliance?",options:["₹10 lakh","₹50 crore","₹250 crore","No penalty"],answer:2,explain:"The Act allows penalties up to ₹250 crore for violations."},
+  {q:"Who enforces the DPDP Act?",options:["CERT-In","Data Protection Board of India","RBI","MeitY"],answer:1,explain:"The Data Protection Board enforces DPDP Act provisions."},
+  {q:"Which principle is central to DPDP?",options:["Consent and Minimization","Free Data Flow","Unlimited storage","Mass Marketing"],answer:0,explain:"DPDP emphasizes consent and minimal data collection."},
+  {q:"Who is a Data Fiduciary?",options:["Entity determining purpose of processing","The data subject","Any tech vendor","Government only"],answer:0,explain:"A Data Fiduciary decides the purpose of data processing."},
+  {q:"What must a Data Fiduciary obtain before processing?",options:["Consent","Payment","License","Nothing"],answer:0,explain:"Processing requires clear and informed consent."},
+  {q:"Which rights does DPDP give individuals?",options:["Right to correction and grievance redressal","Right to sell data","Right to be rich","Right to clone data"],answer:0,explain:"It gives right to correction, erasure, and grievance redressal."},
+  {q:"Who can file a complaint for data misuse?",options:["Any Data Principal","Only companies","Only Government","No one"],answer:0,explain:"Any individual whose data is mishandled can complain."},
+  {q:"What does 'consent manager' mean?",options:["Entity enabling individuals to manage consent","Data auditor","Legal advisor","None of these"],answer:0,explain:"Consent Managers allow users to manage and withdraw consents."}
+];
+
+let selectedQuestions=[],current=0,score=0;
+const intro=document.getElementById('intro'),
+      game=document.getElementById('game'),
+      final=document.getElementById('final'),
+      qText=document.getElementById('questionText'),
+      opts=document.getElementById('options'),
+      feedback=document.getElementById('feedback'),
+      nextBtn=document.getElementById('nextBtn'),
+      startBtn=document.getElementById('startBtn'),
+      restartBtn=document.getElementById('restartBtn'),
+      scoreText=document.getElementById('scoreText'),
+      finalMessage=document.getElementById('finalMessage'),
+      badge=document.getElementById('badge'),
+      captain=document.querySelectorAll('#captain')[1]||document.getElementById('captain'),
+      rogue=document.getElementById('rogue'),
+      progressFill=document.getElementById('progressFill');
+
+startBtn.onclick=startGame;
+restartBtn.onclick=startGame;
+nextBtn.onclick=nextQuestion;
+
+function startGame(){
+  intro.classList.add('hidden');
+  final.classList.add('hidden');
+  game.classList.remove('hidden');
+  selectedQuestions=shuffle(questions).slice(0,10);
+  current=0;score=0;
+  updateProgress();
+  resetPositions();
+  loadQuestion();
+}
+function loadQuestion(){
+  feedback.innerHTML="";nextBtn.classList.add('hidden');
+  const q=selectedQuestions[current];
+  qText.textContent="Q"+(current+1)+". "+q.q;
+  opts.innerHTML="";
+  q.options.forEach((opt,i)=>{
+    const div=document.createElement('div');
+    div.className='option';
+    div.textContent=String.fromCharCode(65+i)+". "+opt;
+    div.onclick=()=>checkAnswer(i);
+    opts.appendChild(div);
+  });
+}
+function checkAnswer(i){
+  const q=selectedQuestions[current];
+  document.querySelectorAll('.option').forEach(o=>o.style.pointerEvents="none");
+  if(i===q.answer){
+    score++;
+    captain.style.animation='defend 0.6s';
+    feedback.className="correct";
+    feedback.innerHTML="✅ Excellent! "+q.explain;
+  } else {
+    rogue.style.animation='attack 0.6s';
+    feedback.className="wrong";
+    feedback.innerHTML="❌ Oops! Correct answer: <b>"+q.options[q.answer]+"</b><br>"+q.explain;
+  }
+  updateProgress();
+  setTimeout(()=>{captain.style.animation=''; rogue.style.animation='';},700);
+  nextBtn.classList.remove('hidden');
+}
+function updateProgress(){
+  const percent=Math.round(((selectedQuestions.length-(current))/selectedQuestions.length)*100);
+  const fortressHealth=Math.max(0,100 - ((current-score)*10));
+  progressFill.style.width=fortressHealth+"%";
+  if(fortressHealth<40)progressFill.style.background='linear-gradient(90deg,#ff3333,#ff9966)';
+  else progressFill.style.background='linear-gradient(90deg,#00ff99,#00ccff)';
+}
+function nextQuestion(){
+  current++;
+  if(current<selectedQuestions.length)loadQuestion();
+  else endGame();
+}
+function endGame(){
+  game.classList.add('hidden');
+  final.classList.remove('hidden');
+  let percent=Math.round((score/selectedQuestions.length)*100);
+  scoreText.textContent="You answered "+score+" of "+selectedQuestions.length+" correctly ("+percent+"%).";
+  let msg,b;
+  if(percent>=90){b="🥇";msg="Gold Shield — Supreme Defender of Data!";}
+  else if(percent>=70){b="🥈";msg="Silver Shield — Strong Guardian of Privacy!";}
+  else if(percent>=50){b="🥉";msg="Bronze Shield — Privacy Apprentice!";}
+  else {b="⚙️";msg="Rookie Badge — Train harder with Captain Cypher!";}
+  badge.textContent=b;finalMessage.textContent=msg;
+}
+function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
+function resetPositions(){
+  captain.style.transform='translateX(0)';
+  rogue.style.transform='translateX(0)';
+}
+</script>
+</body>
+</html>
