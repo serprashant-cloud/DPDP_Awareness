@@ -89,6 +89,31 @@
     border-radius: 10px;
     transition: width 0.6s ease;
   }
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* space between shield and text */
+  margin-top: 20px;
+}
+
+.shield-icon {
+  font-size: 48px;
+  animation: pulseShield 2s infinite ease-in-out;
+}
+
+@keyframes pulseShield {
+  0% { transform: scale(1); text-shadow: 0 0 8px #00ffff; }
+  50% { transform: scale(1.1); text-shadow: 0 0 20px #00ccff; }
+  100% { transform: scale(1); text-shadow: 0 0 8px #00ffff; }
+}
+
+h1 {
+  color: white;
+  font-size: 28px;
+  text-align: center;
+  margin: 0;
+}
 
   #speech {
     background: rgba(255,255,255,0.1);
@@ -194,15 +219,18 @@
 <body>
   <div id="game-container">
     <div id="intro">
-  <<div id="intro">
   <div id="captain"></div>
-  <h1>Welcome Defender Cadet!</h1>
+  <div class="title-container">
+    <span class="shield-icon">🛡️</span>
+    <h1>Welcome Defender Cadet!</h1>
+  </div>
   <div id="speech">
     I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
     Rogue Byte is advancing to breach our defenses!<br>
     Enter your name to start your mission.
   </div>
-  <input type="text" id="userNameInput" placeholder="Enter your name" style="padding:10px; border-radius:8px; border:none; width:60%; max-width:200px; margin-top:15px;">
+  <input type="text" id="userNameInput" placeholder="Enter your name" 
+         style="padding:10px; border-radius:8px; border:none; width:60%; max-width:200px; margin-top:15px;">
   <br>
   <button id="startBtn">Begin Mission 🚀</button>
 </div>
@@ -219,13 +247,11 @@
       <button id="nextBtn" class="hidden">Next ➡️</button>
     </div>
 
-    <div id="final" class="hidden" style="text-align:center;">
-  <div style="display:flex; flex-direction:column; align-items:center; gap:15px; margin-top:20px;">
-    <div id="badge" style="font-size:50px;"></div>
-    <h2 id="scoreText" style="margin:0;"></h2>
-    <div id="finalMessage" style="font-size:18px; color:#fff; max-width:80%;"></div>
-    <button onclick="restartGame()" style="margin-top:20px;">Play Again</button>
-  </div>
+   <div id="final" class="hidden">
+  <h2 id="scoreText"></h2>
+  <div id="badge"></div>
+  <div id="finalMessage"></div>
+  <button onclick="restartGame()">Play Again</button>
 </div>
   </div>
 
