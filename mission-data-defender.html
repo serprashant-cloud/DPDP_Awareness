@@ -363,21 +363,36 @@ function updateProgress(){
   const totalQuestions = selectedQuestions.length;
   const step = 50 / totalQuestions; // each question moves ±5% if 10 questions
   const fortressHealth = Math.max(0, Math.min(100, 50 + (score - (current - score)) * step * 2));
-  
+
   progressFill.style.width = fortressHealth + "%";
 
   if(fortressHealth < 40) 
       progressFill.style.background='linear-gradient(90deg,#ff3333,#ff9966)';
   else 
       progressFill.style.background='linear-gradient(90deg,#00ff99,#00ccff)';
-}function nextQuestion(){
+
+  // ⚠️ Check if fortress breached
+  if(fortressHealth <= 0){
+      endGame(true); // pass flag indicating failure
+  }
+}
+function nextQuestion(){
   current++;
   if(current<selectedQuestions.length)loadQuestion();
   else endGame();
 }
-function endGame(){
+function endGame(breached = false){
   game.classList.add('hidden');
   final.classList.remove('hidden');
+
+  if(breached){
+    badge.textContent = "💥";
+    scoreText.textContent = userName + ", the Data Fortress has been breached!";
+    finalMessage.textContent = "Mission Failed — The Rogue Byte succeeded! Train harder with Captain Cypher!";
+    return; // stop further execution
+  }
+
+  // Normal game ending
   let percent = Math.round((score / selectedQuestions.length) * 100);
   scoreText.textContent = userName + ", you answered " + score + " of " + selectedQuestions.length + " correctly (" + percent + "%).";
 
@@ -387,7 +402,7 @@ function endGame(){
   else if(percent >= 50){ b = "🥉"; msg = "Bronze Shield — Privacy Apprentice!"; }
   else { b = "⚙️"; msg = "Rookie Badge — Train harder with Captain Cypher!"; }
 
-  badge.textContent = b + " " + userName; // include name with badge
+  badge.textContent = b + " " + userName; 
   finalMessage.textContent = msg;
 }
 
