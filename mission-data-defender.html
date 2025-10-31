@@ -53,54 +53,48 @@
 </style>
 </head>
 <body>
-  <div id="game-container">
-    <div id="intro">
-      <div class="title-container">
-        <span class="shield-icon">🛡️</span>
-        <h1>Welcome Defender Cadet!</h1>
-      </div>
-
-      <div id="speech">
-        I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
-        Rogue Byte is advancing to breach our defenses!<br>
-        Enter your name to start your mission.
-      </div>
-
-      <input id="userNameInput" type="text" placeholder="Enter your name" />
-      <br />
-      <button id="startBtn">Begin Mission 🚀</button>
+<div id="game-container">
+  <div id="intro">
+    <div class="title-container">
+      <span class="shield-icon">🛡️</span>
+      <h1>Welcome Defender Cadet!</h1>
     </div>
-
-    <div id="game" class="hidden">
-      <div id="progressBar"><div id="progressFill"></div></div>
-      <div id="battlefield">
-        <div id="captain" class="character"></div>
-        <div id="rogue" class="character"></div>
-      </div>
-
-      <div class="question">
-        <h2 id="questionText"></h2>
-        <div id="options"></div>
-      </div>
-
-      <div id="feedback"></div>
-      <button id="nextBtn" class="hidden">Next ➡️</button>
+    <div id="speech">
+      I am <strong>Captain Cypher</strong> — Guardian of the Data Fortress.<br>
+      Rogue Byte is advancing to breach our defenses!<br>
+      Enter your name to start your mission.
     </div>
-
-    <div id="final" class="hidden">
-      <h2 id="scoreText"></h2>
-      <div id="badge"></div>
-      <div id="finalMessage"></div>
-      <button id="restartBtn">Play Again</button>
-    </div>
+    <input id="userNameInput" type="text" placeholder="Enter your name" />
+    <br />
+    <button id="startBtn">Begin Mission 🚀</button>
   </div>
 
+  <div id="game" class="hidden">
+    <div id="progressBar"><div id="progressFill"></div></div>
+    <div id="battlefield">
+      <div id="captain" class="character"></div>
+      <div id="rogue" class="character"></div>
+    </div>
+
+    <div class="question">
+      <h2 id="questionText"></h2>
+      <div id="options"></div>
+    </div>
+
+    <div id="feedback"></div>
+    <button id="nextBtn" class="hidden">Next ➡️</button>
+  </div>
+
+  <div id="final" class="hidden">
+    <h2 id="scoreText"></h2>
+    <div id="badge"></div>
+    <div id="finalMessage"></div>
+    <button id="restartBtn">Play Again</button>
+  </div>
+</div>
+
 <script>
-/* -------------------------
-   QUESTIONS: include explanation property for each object
-   Replace/expand this array with your full 100-question repository.
-   Each object must have: question, options (array), answer (index), explanation (string)
-   ------------------------- */
+// ------------------------- QUESTIONS -------------------------
 const allQuestions = [
   {question:"What does DPDP stand for?", options:["Digital Personal Data Protection","Data Privacy and Defense Policy","Digital Protection and Data Privacy","Data Policy for Digital Platforms"], answer:0, explanation:"DPDP stands for Digital Personal Data Protection Act, 2023."},
   {question:"Who is a Data Fiduciary under DPDP Act?", options:["Person who collects and decides purpose of processing personal data","Person whose data is collected","Regulator appointed by the government","IT vendor managing systems"], answer:0, explanation:"A Data Fiduciary determines the purpose and means of processing personal data."},
@@ -159,14 +153,16 @@ const allQuestions = [
 
   // 100th question
   {question:"Which of these is a key principle of DPDP?", options:["Purpose limitation and minimality","Sell data freely","Ignore consent","Mandatory data sharing"], answer:0, explanation:"DPDP emphasizes purpose limitation and minimal collection (data minimality)."}
-];/* ------------- state ------------- */
+];
+// ------------------------- STATE -------------------------
 let selectedQuestions = [];
+let currentQuestions = []; // store shuffled questions
 let current = 0;
 let score = 0;
-let fortressHealth = 50; // starts in middle
+let fortressHealth = 50;
 let userName = "";
 
-/* ------------- elements ------------- */
+// ------------------------- ELEMENTS -------------------------
 const intro = document.getElementById('intro');
 const game = document.getElementById('game');
 const finalScreen = document.getElementById('final');
@@ -183,48 +179,35 @@ document.getElementById('startBtn').onclick = startGame;
 nextBtn.onclick = nextQuestion;
 document.getElementById('restartBtn').onclick = restartGame;
 
-/* ------------- functions ------------- */
-function shuffleQuestionOptions(question) {
-  const options = question.options.map((opt, index) => ({ text: opt, index }));
-  for (let i = options.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [options[i], options[j]] = [options[j], options[i]];
+// ------------------------- FUNCTIONS -------------------------
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
   }
-  const shuffled = options.map(o => o.text);
-  const newAnswerIndex = options.findIndex(o => o.index === question.answer);
-  return { ...question, options: shuffled, answer: newAnswerIndex };
+  return a;
 }
-  
-function shuffleQuestionOptions(question) {
-  // Pair each option with its original index
-  const optionPairs = question.options.map((opt, index) => ({
-    text: opt,
-    originalIndex: index
-  }));
 
-  // Shuffle the pairs
-  for (let i = optionPairs.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+function shuffleQuestionOptions(question){
+  const optionPairs = question.options.map((opt,index)=>({text:opt, originalIndex:index}));
+  for(let i=optionPairs.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
     [optionPairs[i], optionPairs[j]] = [optionPairs[j], optionPairs[i]];
   }
-
-  // Rebuild the question object with shuffled options
-  question.options = optionPairs.map(o => o.text);
-  question.answer = optionPairs.findIndex(o => o.originalIndex === question.answer);
-
+  question.options = optionPairs.map(o=>o.text);
+  question.answer = optionPairs.findIndex(o=>o.originalIndex === question.answer);
   return question;
 }
-  
+
 function startGame(){
   userName = document.getElementById('userNameInput').value.trim();
-  if(!userName){
-    alert("Please enter your name to start!");
-    return;
-  }
+  if(!userName){ alert("Please enter your name to start!"); return; }
 
-  // reset
-  selectedQuestions = shuffle(allQuestions).slice(0, 10);
-  current = 0; score = 0; fortressHealth = 50;
+  selectedQuestions = shuffle(allQuestions).slice(0,10);
+  currentQuestions = selectedQuestions.map(q=>shuffleQuestionOptions({...q}));
+  current=0; score=0; fortressHealth=50;
+
   progressFill.style.width = fortressHealth + "%";
   progressFill.style.background = 'linear-gradient(90deg,#00ff99,#00ccff)';
   intro.classList.add('hidden');
@@ -234,74 +217,60 @@ function startGame(){
   showQuestion();
 }
 
-function showQuestion() {
+function showQuestion(){
   feedback.innerHTML = '';
   nextBtn.classList.add('hidden');
-  let q = currentQuestions[currentIndex];
-  
-  // Shuffle options and correct answer
-  q = shuffleQuestionOptions(q);
-  
-  questionText.textContent = "Q" + (currentIndex + 1) + ". " + q.question;
+  const q = currentQuestions[current];
+
+  questionText.textContent = "Q" + (current+1) + ". " + q.question;
   optionsDiv.innerHTML = '';
-  
-  q.options.forEach((opt, i) => {
+  q.options.forEach((opt,i)=>{
     const div = document.createElement('div');
-    div.className = 'option';
-    div.innerHTML = `<strong>${String.fromCharCode(65 + i)}.</strong> ${opt}`;
-    div.onclick = () => checkAnswer(i, q);
+    div.className='option';
+    div.innerHTML=`<strong>${String.fromCharCode(65+i)}.</strong> ${opt}`;
+    div.onclick = ()=> handleAnswer(i);
     optionsDiv.appendChild(div);
   });
 }
 
 function handleAnswer(choice){
-  const q = selectedQuestions[current];
-  // prevent double-click
-  document.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
+  const q = currentQuestions[current];
+  document.querySelectorAll('.option').forEach(o=>o.style.pointerEvents='none');
 
   if(choice === q.answer){
     score++;
-    fortressHealth = Math.min(100, fortressHealth + 10);
-    feedback.className = 'correct';
-    // show praise + explanation
+    fortressHealth = Math.min(100, fortressHealth+10);
+    feedback.className='correct';
     feedback.innerHTML = `<strong>✅ Correct!</strong><br>${q.explanation || ''}`;
-    // captain defend animation
-    const cap = document.getElementById('captain');
-    cap.style.animation = 'defend 0.6s';
-    setTimeout(()=> cap.style.animation = '', 650);
-  } else {
-    fortressHealth = Math.max(0, fortressHealth - 20);
-    feedback.className = 'wrong';
-    // show correct answer along with explanation if available
+    const cap=document.getElementById('captain');
+    cap.style.animation='defend 0.6s';
+    setTimeout(()=>cap.style.animation='',650);
+  }else{
+    fortressHealth = Math.max(0, fortressHealth-20);
+    feedback.className='wrong';
     const correctText = q.options[q.answer] || '---';
     feedback.innerHTML = `<strong>❌ Wrong.</strong> Correct: <strong>${correctText}</strong><br>${q.explanation || ''}`;
-    // rogue attack animation
-    const rg = document.getElementById('rogue');
-    rg.style.animation = 'attack 0.6s';
-    setTimeout(()=> rg.style.animation = '', 650);
+    const rg=document.getElementById('rogue');
+    rg.style.animation='attack 0.6s';
+    setTimeout(()=>rg.style.animation='',650);
   }
 
-  // update progress bar
-  progressFill.style.width = fortressHealth + '%';
-  if(fortressHealth < 40) progressFill.style.background='linear-gradient(90deg,#ff3333,#ff9966)';
-  else progressFill.style.background='linear-gradient(90deg,#00ff99,#00ccff)';
+  progressFill.style.width = fortressHealth+'%';
+  progressFill.style.background = (fortressHealth<40)? 'linear-gradient(90deg,#ff3333,#ff9966)' : 'linear-gradient(90deg,#00ff99,#00ccff)';
 
-  // if breached, end immediately
-  if(fortressHealth <= 0){
-    // small delay to show feedback then end
-    setTimeout(()=> endGame(false), 600);
+  if(fortressHealth<=0){
+    setTimeout(()=>endGame(false),600);
     return;
   }
 
-  // show Next
   nextBtn.classList.remove('hidden');
 }
 
 function nextQuestion(){
   current++;
-  if(current >= selectedQuestions.length){
+  if(current>=currentQuestions.length){
     endGame(true);
-  } else {
+  }else{
     showQuestion();
   }
 }
@@ -309,49 +278,34 @@ function nextQuestion(){
 function endGame(success){
   game.classList.add('hidden');
   finalScreen.classList.remove('hidden');
-
-  // show badge only now
-  badge.style.display = 'block';
+  badge.style.display='block';
 
   if(!success){
-    scoreText.textContent = `${userName}, the Fortress was not defended!`;
-    badge.textContent = '💥';
-    finalMessage.textContent = 'Mission Failed — Rogue Byte breached our defenses.';
+    scoreText.textContent=`${userName}, the Fortress was not defended!`;
+    badge.textContent='💥';
+    finalMessage.textContent='Mission Failed — Rogue Byte breached our defenses.';
     return;
   }
 
-  // success flow
-  const percent = Math.round((score / selectedQuestions.length) * 100);
-  scoreText.textContent = `${userName}, you answered ${score} of ${selectedQuestions.length} correctly (${percent}%).`;
+  const percent = Math.round((score/currentQuestions.length)*100);
+  scoreText.textContent=`${userName}, you answered ${score} of ${currentQuestions.length} correctly (${percent}%).`;
 
-  let b = '⚙️', msg = 'Rookie Badge — Train with Captain Cypher!';
-  if(percent >= 90){ b = '🥇'; msg = 'Gold Shield — Supreme Defender of Data!'; }
-  else if(percent >= 70){ b = '🥈'; msg = 'Silver Shield — Strong Guardian of Privacy!'; }
-  else if(percent >= 50){ b = '🥉'; msg = 'Bronze Shield — Privacy Apprentice!'; }
+  let b='⚙️', msg='Rookie Badge — Train with Captain Cypher!';
+  if(percent>=90){ b='🥇'; msg='Gold Shield — Supreme Defender of Data!'; }
+  else if(percent>=70){ b='🥈'; msg='Silver Shield — Strong Guardian of Privacy!'; }
+  else if(percent>=50){ b='🥉'; msg='Bronze Shield — Privacy Apprentice!'; }
 
-  badge.textContent = `${b} ${userName}`;
-  finalMessage.textContent = msg;
+  badge.textContent=`${b} ${userName}`;
+  finalMessage.textContent=msg;
 }
 
 function restartGame(){
-  // reset UI
-  badge.style.display = '';
+  badge.style.display='';
   finalScreen.classList.add('hidden');
   intro.classList.remove('hidden');
-  document.getElementById('userNameInput').value = '';
-  feedback.innerHTML = '';
-  progressFill.style.width = '50%';
-}
-
-/* utility: shuffle */
-function shuffle(arr){
-  // shallow copy then Fisher-Yates
-  const a = arr.slice();
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
-  }
-  return a;
+  document.getElementById('userNameInput').value='';
+  feedback.innerHTML='';
+  progressFill.style.width='50%';
 }
 </script>
 </body>
