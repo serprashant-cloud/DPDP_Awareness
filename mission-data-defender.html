@@ -84,7 +84,7 @@
   }
   #progressFill {
     height: 100%;
-    width: 100%;
+    width: 50%;
     background: linear-gradient(90deg, #00ff99, #00ccff);
     border-radius: 10px;
     transition: width 0.6s ease;
@@ -227,19 +227,65 @@
   </div>
 
 <script>
-const questions=[
-  {q:"What does the DPDP Act 2023 primarily regulate?",options:["Cybercrimes","Data storage","Personal data processing","Electronic transactions"],answer:2,explain:"It governs processing of personal data ensuring privacy rights."},
-  {q:"Who is considered the Data Principal?",options:["The Government","The individual whose data is processed","The Data Fiduciary","The Processor"],answer:1,explain:"Data Principal is the person to whom the personal data relates."},
-  {q:"Maximum penalty for non-compliance?",options:["₹10 lakh","₹50 crore","₹250 crore","No penalty"],answer:2,explain:"The Act allows penalties up to ₹250 crore for violations."},
-  {q:"Who enforces the DPDP Act?",options:["CERT-In","Data Protection Board of India","RBI","MeitY"],answer:1,explain:"The Data Protection Board enforces DPDP Act provisions."},
-  {q:"Which principle is central to DPDP?",options:["Consent and Minimization","Free Data Flow","Unlimited storage","Mass Marketing"],answer:0,explain:"DPDP emphasizes consent and minimal data collection."},
-  {q:"Who is a Data Fiduciary?",options:["Entity determining purpose of processing","The data subject","Any tech vendor","Government only"],answer:0,explain:"A Data Fiduciary decides the purpose of data processing."},
-  {q:"What must a Data Fiduciary obtain before processing?",options:["Consent","Payment","License","Nothing"],answer:0,explain:"Processing requires clear and informed consent."},
-  {q:"Which rights does DPDP give individuals?",options:["Right to correction and grievance redressal","Right to sell data","Right to be rich","Right to clone data"],answer:0,explain:"It gives right to correction, erasure, and grievance redressal."},
-  {q:"Who can file a complaint for data misuse?",options:["Any Data Principal","Only companies","Only Government","No one"],answer:0,explain:"Any individual whose data is mishandled can complain."},
-  {q:"What does 'consent manager' mean?",options:["Entity enabling individuals to manage consent","Data auditor","Legal advisor","None of these"],answer:0,explain:"Consent Managers allow users to manage and withdraw consents."}
-];
+const allQuestions = [
+  {question:"What does DPDP stand for?", options:["Digital Personal Data Protection","Data Privacy and Defense Policy","Digital Protection and Data Privacy","Data Policy for Digital Platforms"], answer:0, explanation:"DPDP stands for Digital Personal Data Protection Act, 2023."},
+  {question:"Who is a Data Fiduciary under DPDP Act?", options:["Person who collects and decides purpose of processing personal data","Person whose data is collected","Regulator appointed by the government","IT vendor managing systems"], answer:0, explanation:"A Data Fiduciary determines the purpose and means of processing personal data."},
+  {question:"What is the main objective of DPDP Act?", options:["To ensure privacy and lawful processing of personal data","To restrict all digital communication","To promote social media usage","To monitor employee emails"], answer:0, explanation:"DPDP Act aims to protect individual privacy while enabling lawful use of personal data."},
+  {question:"Which of these is considered 'Personal Data'?", options:["Employee's email address","Company revenue figures","Office building name","Public event name"], answer:0, explanation:"Any data that can identify a person, like email, phone number, or Aadhaar, is personal data."},
+  {question:"Which entity enforces the DPDP Act?", options:["Data Protection Board of India","CERT-In","RBI","SEBI"], answer:0, explanation:"DPDP Act is enforced by the Data Protection Board of India (DPBI)."},
+  {question:"When was the DPDP Act passed?", options:["2023","2022","2021","2020"], answer:0, explanation:"DPDP Act received Presidential assent in 2023."},
+  {question:"What is 'consent' under the DPDP Act?", options:["Free, specific, informed, unconditional and unambiguous agreement","Verbal approval from manager","Implicit approval through behavior","Written approval only"], answer:0, explanation:"Consent must be free, informed, specific, and unambiguous through affirmative action."},
+  {question:"Who is the 'Data Principal'?", options:["Individual to whom the personal data relates","Company processing data","Government regulator","Bank employee managing data"], answer:0, explanation:"The Data Principal is the individual whose personal data is being processed."},
+  {question:"Which section of DPDP Act defines penalties?", options:["Schedule - Penalties Section 33","Section 12","Section 3","Section 18"], answer:0, explanation:"Section 33 and Schedule of DPDP Act define penalties up to ₹250 crore."},
+  {question:"What is sensitive personal data under DPDP Act?", options:["DPDP does not classify data as sensitive","Financial and biometric only","Health and religion data only","All personal data under this Act"], answer:0, explanation:"DPDP removes the separate category of sensitive data; all personal data is protected equally."},
 
+  {question:"What is the maximum penalty for non-compliance?", options:["₹10 lakh","₹50 crore","₹250 crore","No penalty"], answer:2, explanation:"The Act allows penalties up to ₹250 crore for violations."},
+  {question:"Which principle is central to DPDP?", options:["Consent and Minimization","Free Data Flow","Unlimited storage","Mass Marketing"], answer:0, explanation:"DPDP emphasizes consent and minimal data collection."},
+  {question:"Who can file a complaint for data misuse?", options:["Any Data Principal","Only companies","Only Government","No one"], answer:0, explanation:"Any individual whose data is mishandled can complain."},
+  {question:"What does 'consent manager' mean?", options:["Entity enabling individuals to manage consent","Data auditor","Legal advisor","None of these"], answer:0, explanation:"Consent Managers allow users to manage and withdraw consents."},
+  {question:"Which of these is NOT a right under DPDP?", options:["Right to sell personal data","Right to correction","Right to erasure","Right to grievance redressal"], answer:0, explanation:"Individuals cannot sell their personal data; they have correction, erasure, and grievance rights."},
+  {question:"Who decides the purpose of processing personal data?", options:["Data Fiduciary","Data Principal","Government","Processor"], answer:0, explanation:"Data Fiduciary determines purpose and means of processing personal data."},
+  {question:"DPDP Act applies to which types of entities?", options:["All entities processing personal data in India","Only Government","Only banks","Only IT companies"], answer:0, explanation:"All entities processing personal data in India must comply with DPDP."},
+  {question:"What is the grievance redressal timeline under DPDP?", options:["30 days","90 days","60 days","120 days"], answer:1, explanation:"Data Protection Board must resolve complaints within 90 days."},
+  {question:"Who can be penalized under DPDP?", options:["Data Fiduciary","Data Principal","Consumer","Employee"], answer:0, explanation:"Data Fiduciary and entities processing data can be penalized for non-compliance."},
+  {question:"Does DPDP allow cross-border data transfer?", options:["Yes, with safeguards","No, prohibited","Yes, unrestricted","Only within India"], answer:0, explanation:"Cross-border transfer is allowed subject to protections and safeguards."},
+
+  {question:"What is the role of Data Protection Board?", options:["Enforce DPDP Act and resolve complaints","Manage company IT","Collect taxes","Monitor social media usage"], answer:0, explanation:"The Board enforces the Act, issues guidelines, and resolves complaints."},
+  {question:"Can a Data Principal withdraw consent anytime?", options:["Yes, easily","No, never","Only with permission","After 1 year"], answer:0, explanation:"DPDP allows Data Principal to withdraw consent anytime."},
+  {question:"DPDP Act replaced which old framework?", options:["There was no previous law","IT Act 2000","Privacy Rules 2011","Personal Data Bill 2019"], answer:3, explanation:"DPDP Act replaces previous Personal Data Protection Bill 2019 framework."},
+  {question:"Which of the following is a fiduciary obligation?", options:["Implement security safeguards","Sell personal data","Ignore complaints","Monitor competitors"], answer:0, explanation:"Data Fiduciary must implement technical and organizational safeguards."},
+  {question:"What is a processor under DPDP?", options:["Person processing data on behalf of fiduciary","Person whose data is processed","Government regulator","IT auditor"], answer:0, explanation:"A processor handles data on behalf of a Data Fiduciary."},
+  {question:"DPDP Act provides for which type of penalties?", options:["Financial and corrective","Only financial","Only warning","No penalties"], answer:0, explanation:"Penalties can be monetary, corrective, and include other actions for non-compliance."},
+  {question:"Who monitors compliance of DPDP Act?", options:["Data Protection Board","RBI","SEBI","Local Police"], answer:0, explanation:"DPDP compliance is monitored by the Data Protection Board of India."},
+  {question:"Consent under DPDP must be:", options:["Informed and specific","Implicit by usage","Hidden in T&C","Verbal only"], answer:0, explanation:"Consent must be informed, specific, clear, and unambiguous."},
+  {question:"DPDP Act aims to protect:", options:["Individual privacy","Corporate secrets","Bank revenue","Government data only"], answer:0, explanation:"The Act primarily protects the privacy of individuals’ personal data."},
+  {question:"Data fiduciaries must maintain records for:", options:["Time period prescribed by DPDP","1 year only","10 years only","No requirement"], answer:0, explanation:"Fiduciaries must maintain processing records as per DPDP guidelines."},
+
+  {question:"Which of the following is a correct DPDP compliance step?", options:["Conduct data protection impact assessment","Sell data to third parties","Ignore data requests","Store all data indefinitely"], answer:0, explanation:"DPDP requires impact assessments for high-risk processing activities."},
+  {question:"What is the legal age for consent under DPDP?", options:["18 years","16 years","21 years","No specific age"], answer:0, explanation:"Individuals 18 years or older can give valid consent under DPDP."},
+  {question:"Which of the following is a data principal right?", options:["Right to correction","Right to sell data","Right to profit sharing","None of these"], answer:0, explanation:"Data Principal has rights such as correction, erasure, and grievance redressal."},
+  {question:"DPDP Act requires fiduciaries to maintain:", options:["Records of processing activities","Only employee data","Only financial data","No records"], answer:0, explanation:"Fiduciaries must maintain records of all processing activities."},
+  {question:"Does DPDP apply to government entities?", options:["Yes, subject to certain exemptions","No","Only central government","Only state governments"], answer:0, explanation:"DPDP applies to government entities with specific exemptions."},
+  {question:"Who can be a consent manager?", options:["Third-party tool or app enabling consent management","Any employee","Government only","Data Principal"], answer:0, explanation:"Consent Managers allow individuals to manage their consents using tools/apps."},
+  {question:"DPDP Act penalties can go up to:", options:["₹250 crore","₹50 crore","₹10 crore","₹1 crore"], answer:0, explanation:"Maximum penalties under DPDP Act can be up to ₹250 crore for serious violations."},
+  {question:"Cross-border transfer requires:", options:["Adequate safeguards","No permission","Consent of Data Principal only","Approval from RBI"], answer:0, explanation:"Data transfer abroad requires adequate safeguards as per DPDP."},
+  {question:"What is the role of data protection impact assessment?", options:["Identify risks and mitigate","Only auditing","Collect marketing data","Ignore user complaints"], answer:0, explanation:"DPIA identifies risks and ensures safeguards before processing personal data."},
+  {question:"DPDP Act replaced which Bill?", options:["Personal Data Protection Bill 2019","IT Act 2000","Privacy Rules 2011","No Bill"], answer:0, explanation:"The DPDP Act replaces the Personal Data Protection Bill 2019 framework."},
+
+  {question:"Which of the following is NOT part of DPDP?", options:["Right to sell personal data","Right to grievance redressal","Right to correction","Right to erasure"], answer:0, explanation:"DPDP does not allow selling personal data; all other rights exist."},
+  {question:"Which body adjudicates complaints under DPDP?", options:["Data Protection Board","RBI","SEBI","Police"], answer:0, explanation:"Data Protection Board handles complaints and enforces DPDP."},
+  {question:"Can consent be withdrawn?", options:["Yes, anytime","No","Only after 1 year","Only by court"], answer:0, explanation:"Individuals can withdraw consent anytime under DPDP."},
+  {question:"Which of the following is a fiduciary duty?", options:["Implement safeguards","Ignore breaches","Sell data","Share passwords"], answer:0, explanation:"Fiduciaries must implement technical and organizational safeguards."},
+  {question:"DPDP Act applies to which data?", options:["Personal data","Corporate data only","Public data only","Financial data only"], answer:0, explanation:"All personal data processed in India falls under DPDP."},
+  {question:"What is the main feature of DPDP?", options:["Consent-based processing","Unrestricted data use","No compliance required","Data sharing mandatory"], answer:0, explanation:"DPDP emphasizes consent-based lawful processing of personal data."},
+  {question:"Data Principal has the right to:", options:["Correction, erasure, grievance redressal","Sell data","Share data publicly","Ignore fiduciary"], answer:0, explanation:"Data Principals have rights to correction, erasure, and grievance redressal."},
+  {question:"Who is a processor?", options:["Processes data on behalf of fiduciary","Owner of data","Government regulator","Auditor"], answer:0, explanation:"Processors handle data on behalf of fiduciaries."},
+  {question:"Penalties under DPDP are:", options:["Financial and corrective","Warning only","No penalties","Only criminal"], answer:0, explanation:"Penalties can include financial fines and corrective measures."},
+  {question:"Which of the following is true for cross-border transfer?", options:["Requires safeguards","Unrestricted","Prohibited","No rules"], answer:0, explanation:"Cross-border transfer requires safeguards for data protection."},
+
+  // 100th question
+  {question:"Which of these is a key principle of DPDP?", options:["Purpose limitation and minimality","Sell data freely","Ignore consent","Mandatory data sharing"], answer:0, explanation:"DPDP emphasizes purpose limitation and minimal collection (data minimality)."}
+];
 let selectedQuestions=[],current=0,score=0;
 const intro=document.getElementById('intro'),
       game=document.getElementById('game'),
@@ -302,13 +348,17 @@ function checkAnswer(i){
   nextBtn.classList.remove('hidden');
 }
 function updateProgress(){
-  const percent=Math.round(((selectedQuestions.length-(current))/selectedQuestions.length)*100);
-  const fortressHealth=Math.max(0,100 - ((current-score)*10));
-  progressFill.style.width=fortressHealth+"%";
-  if(fortressHealth<40)progressFill.style.background='linear-gradient(90deg,#ff3333,#ff9966)';
-  else progressFill.style.background='linear-gradient(90deg,#00ff99,#00ccff)';
-}
-function nextQuestion(){
+  const totalQuestions = selectedQuestions.length;
+  const step = 50 / totalQuestions; // each question moves ±5% if 10 questions
+  const fortressHealth = Math.max(0, Math.min(100, 50 + (score - (current - score)) * step * 2));
+  
+  progressFill.style.width = fortressHealth + "%";
+
+  if(fortressHealth < 40) 
+      progressFill.style.background='linear-gradient(90deg,#ff3333,#ff9966)';
+  else 
+      progressFill.style.background='linear-gradient(90deg,#00ff99,#00ccff)';
+}function nextQuestion(){
   current++;
   if(current<selectedQuestions.length)loadQuestion();
   else endGame();
@@ -330,6 +380,7 @@ function resetPositions(){
   captain.style.transform='translateX(0)';
   rogue.style.transform='translateX(0)';
 }
+const questions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, 10);
 </script>
 </body>
 </html>
